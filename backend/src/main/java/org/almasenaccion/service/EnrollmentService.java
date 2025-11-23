@@ -17,12 +17,13 @@ public class EnrollmentService {
 
   @Transactional
   public Enrollment enroll(User user, Activity activity) {
-    if (enrollments.findByUserAndActivity(user, activity).isPresent()) throw new IllegalStateException("Ya inscrito");
-    int count = enrollments.countByActivity(activity);
+    if (enrollments.findByUserIdAndActivityId(user.getId(), activity.getId()).isPresent()) throw new IllegalStateException("Ya inscrito");
+    int count = enrollments.countByActivityId(activity.getId());
     if (count >= activity.getCapacity()) throw new IllegalStateException("No quedan cupos");
     Enrollment e = new Enrollment();
-    e.setUser(user);
-    e.setActivity(activity);
+    e.setUserId(user.getId());
+    e.setActivityId(activity.getId());
+    e.initOnCreate();
     return enrollments.save(e);
   }
 }

@@ -1,38 +1,31 @@
 package org.almasenaccion.model;
 
-import jakarta.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.Instant;
 import java.util.UUID;
 
-@Entity
-@Table(name = "verification_tokens", indexes = {
-  @Index(name = "idx_verification_token_token", columnList = "token", unique = true)
-})
+@Document(collection = "verification_tokens")
 public class VerificationToken {
   @Id
-  @Column(name = "id", nullable = false, updatable = false)
-  private UUID id;
+  private String id;
 
-  @Column(name = "token", nullable = false, unique = true)
+  @Indexed(unique = true)
   private String token;
 
-  @ManyToOne(optional = false)
-  @JoinColumn(name = "user_id", nullable = false)
-  private User user;
+  private String userId;
 
-  @Column(name = "expires_at", nullable = false)
   private Instant expiresAt;
 
-  @Column(name = "created_at", nullable = false, updatable = false)
   private Instant createdAt;
 
-  @PrePersist
-  void prePersist() {
-    this.id = UUID.randomUUID();
+  public void initOnCreate() {
+    this.id = UUID.randomUUID().toString();
     this.createdAt = Instant.now();
   }
 
-  public UUID getId() {
+  public String getId() {
     return id;
   }
 
@@ -44,13 +37,8 @@ public class VerificationToken {
     this.token = token;
   }
 
-  public User getUser() {
-    return user;
-  }
-
-  public void setUser(User user) {
-    this.user = user;
-  }
+  public String getUserId() { return userId; }
+  public void setUserId(String userId) { this.userId = userId; }
 
   public Instant getExpiresAt() {
     return expiresAt;

@@ -11,10 +11,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.boot.autoconfigure.mongo.embedded.EmbeddedMongoAutoConfiguration;
 
 @SpringBootTest
 @ActiveProfiles("test")
 public class AuthServiceTests {
+  // Embedded MongoDB is auto-configured by Spring Boot with flapdoodle dependency
+
   @Autowired
   AuthService authService;
   @Autowired
@@ -22,6 +25,7 @@ public class AuthServiceTests {
 
   @Test
   void registrationCreatesDisabledUser() {
+    userRepository.deleteAll();
     RegisterRequest r = new RegisterRequest();
     r.setFirstName("Ana");
     r.setEmail("ana@example.org");
@@ -34,6 +38,7 @@ public class AuthServiceTests {
 
   @Test
   void lockAfterThreeAttempts() {
+    userRepository.deleteAll();
     RegisterRequest r = new RegisterRequest();
     r.setFirstName("Luis");
     r.setEmail("luis@example.org");

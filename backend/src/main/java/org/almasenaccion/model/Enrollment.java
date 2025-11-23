@@ -1,39 +1,32 @@
 package org.almasenaccion.model;
 
-import jakarta.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.mapping.Document;
 import java.time.Instant;
 import java.util.UUID;
 
-@Entity
-@Table(name = "enrollments", uniqueConstraints = {
-  @UniqueConstraint(name = "uk_enrollment_user_activity", columnNames = {"user_id", "activity_id"})
-})
+@Document(collection = "enrollments")
+@CompoundIndex(name = "uk_enrollment_user_activity", def = "{ 'userId': 1, 'activityId': 1 }", unique = true)
 public class Enrollment {
   @Id
-  @Column(name = "id", nullable = false, updatable = false)
-  private UUID id;
+  private String id;
 
-  @ManyToOne(optional = false)
-  @JoinColumn(name = "user_id", nullable = false)
-  private User user;
+  private String userId;
 
-  @ManyToOne(optional = false)
-  @JoinColumn(name = "activity_id", nullable = false)
-  private Activity activity;
+  private String activityId;
 
-  @Column(name = "created_at", nullable = false, updatable = false)
   private Instant createdAt;
 
-  @PrePersist
-  void prePersist() {
-    this.id = UUID.randomUUID();
+  public void initOnCreate() {
+    this.id = UUID.randomUUID().toString();
     this.createdAt = Instant.now();
   }
 
-  public UUID getId() { return id; }
-  public User getUser() { return user; }
-  public void setUser(User user) { this.user = user; }
-  public Activity getActivity() { return activity; }
-  public void setActivity(Activity activity) { this.activity = activity; }
+  public String getId() { return id; }
+  public String getUserId() { return userId; }
+  public void setUserId(String userId) { this.userId = userId; }
+  public String getActivityId() { return activityId; }
+  public void setActivityId(String activityId) { this.activityId = activityId; }
   public Instant getCreatedAt() { return createdAt; }
 }

@@ -47,11 +47,13 @@ public class AuthService {
     u.setAddress(req.getAddress());
     u.setSkills(req.getSkills());
     u.setRole(Role.VOLUNTARIO);
+    u.initOnCreate();
     users.save(u);
     VerificationToken vt = new VerificationToken();
     vt.setToken(UUID.randomUUID().toString());
-    vt.setUser(u);
+    vt.setUserId(u.getId());
     vt.setExpiresAt(Instant.now().plusSeconds(24 * 3600));
+    vt.initOnCreate();
     tokens.save(vt);
     String verifyUrl = "/api/v1/auth/verify?token=" + vt.getToken();
     emailService.send(u.getEmail(), "Verificación de cuenta", "Usa el enlace para activar tu cuenta: " + verifyUrl);
@@ -63,8 +65,9 @@ public class AuthService {
     if (opt.isEmpty()) throw new IllegalStateException("Token inválido");
     VerificationToken vt = opt.get();
     if (vt.getExpiresAt().isBefore(Instant.now())) throw new IllegalStateException("Token expirado");
-    User u = vt.getUser();
+    User u = users.findById(vt.getUserId()).orElseThrow(() -> new IllegalStateException("Usuario no encontrado"));
     u.setEnabled(true);
+    u.touch();
     users.save(u);
     tokens.delete(vt);
   }
@@ -73,12 +76,12 @@ public class AuthService {
   public JwtResponse login(LoginRequest req) {
     User u = users.findByEmail(req.getEmail()).orElseThrow(() -> new IllegalStateException("Credenciales inválidas"));
     if (!u.isEnabled()) throw new IllegalStateException("Cuenta no verificada");
-    if (u.getAccountLockedUntil() != null && u.getAccountLockedUntil().isAfter(OffsetDateTime.now(ZoneOffset.UTC))) throw new IllegalStateException("Cuenta bloqueada temporalmente");
+    if (u.getAccountLockedUntil() != null && u.getAccountLockedUntil().isAfter(Instant.now())) throw new IllegalStateException("Cuenta bloqueada temporalmente");
     if (!encoder.matches(req.getPassword(), u.getPasswordHash())) {
       int attempts = u.getFailedLoginAttempts() + 1;
       u.setFailedLoginAttempts(attempts);
       if (attempts >= 3) {
-        u.setAccountLockedUntil(OffsetDateTime.now(ZoneOffset.UTC).plusMinutes(15));
+        u.setAccountLockedUntil(Instant.now().plusSeconds(15 * 60));
         u.setFailedLoginAttempts(0);
       }
       users.save(u);

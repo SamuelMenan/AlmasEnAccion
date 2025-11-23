@@ -25,6 +25,7 @@ public class UserService {
     if (req.getPhone() != null) user.setPhone(req.getPhone());
     if (req.getAddress() != null) user.setAddress(req.getAddress());
     if (req.getSkills() != null) user.setSkills(req.getSkills());
+    user.touch();
     return users.save(user);
   }
 }

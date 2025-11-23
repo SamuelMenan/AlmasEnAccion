@@ -1,19 +1,9 @@
 spring:
   application:
     name: almasenaccion
-  datasource:
-    url: ${DB_URL:jdbc:postgresql://localhost:5432/almasenaccion}
-    username: ${DB_USER:almas}
-    password: ${DB_PASSWORD:almas}
-  jpa:
-    hibernate:
-      ddl-auto: validate
-    properties:
-      hibernate:
-        format_sql: true
-        jdbc:
-          time_zone: UTC
-    open-in-view: false
+  data:
+    mongodb:
+      uri: ${SPRING_DATA_MONGODB_URI:mongodb://localhost:27017/almasenaccion}
   mail:
     host: ${MAIL_HOST:localhost}
     port: ${MAIL_PORT:1025}
@@ -62,18 +52,9 @@ spring:
   config:
     activate:
       on-profile: test
-  datasource:
-    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;MODE=PostgreSQL
-    driver-class-name: org.h2.Driver
-    username: sa
-    password: sa
-  jpa:
-    hibernate:
-      ddl-auto: none
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-        show_sql: false
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/test
 security:
   jwt:
     secret: ZmFrZV9zZWNyZXRfZm9yX3Rlc3RzXzMyYnl0ZXNfZmFrZV9zZWNyZXQ=
@@ -84,6 +65,9 @@ spring:
   config:
     activate:
       on-profile: prod
+  data:
+    mongodb:
+      uri: ${SPRING_DATA_MONGODB_URI}
 logging:
   level:
     root: INFO

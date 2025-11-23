@@ -28,7 +28,7 @@ public class EnrollmentController {
 
   @PostMapping("/{id}/enroll")
   @PreAuthorize("hasRole('VOLUNTARIO')")
-  public ResponseEntity<Enrollment> enroll(Authentication auth, @PathVariable("id") UUID id) {
+  public ResponseEntity<Enrollment> enroll(Authentication auth, @PathVariable("id") String id) {
     Activity activity = activityRepository.findById(id).orElseThrow(() -> new IllegalStateException("Actividad no encontrada"));
     User user = userService.getByEmail(auth.getName());
     Enrollment e = enrollmentService.enroll(user, activity);

@@ -1,10 +1,9 @@
 package org.almasenaccion.repository;
 
 import org.almasenaccion.model.VerificationToken;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.mongodb.repository.MongoRepository;
 import java.util.Optional;
-import java.util.UUID;
 
-public interface VerificationTokenRepository extends JpaRepository<VerificationToken, UUID> {
+public interface VerificationTokenRepository extends MongoRepository<VerificationToken, String> {
   Optional<VerificationToken> findByToken(String token);
 }

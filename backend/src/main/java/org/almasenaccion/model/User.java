@@ -1,6 +1,8 @@
 package org.almasenaccion.model;
 
-import jakarta.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -10,82 +12,63 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.UUID;
 
-@Entity
-@Table(name = "users", indexes = {
-  @Index(name = "idx_users_email", columnList = "email", unique = true)
-})
+@Document(collection = "users")
 public class User {
   @Id
-  @Column(name = "id", nullable = false, updatable = false)
-  private UUID id;
+  private String id;
 
   @NotBlank
   @Size(max = 100)
-  @Column(name = "first_name", nullable = false)
   private String firstName;
 
   @Size(max = 100)
-  @Column(name = "last_name")
   private String lastName;
 
   @Email
   @NotBlank
   @Size(max = 255)
-  @Column(name = "email", nullable = false, unique = true)
+  @Indexed(unique = true)
   private String email;
 
   @NotBlank
   @Size(min = 8, max = 255)
-  @Column(name = "password_hash", nullable = false)
   private String passwordHash;
 
   @Pattern(regexp = "^[+0-9().\\s-]{7,20}$")
   @Size(max = 30)
-  @Column(name = "phone")
   private String phone;
 
   @Size(max = 255)
-  @Column(name = "address")
   private String address;
 
   @Size(max = 500)
-  @Column(name = "skills")
   private String skills;
 
-  @Enumerated(EnumType.STRING)
-  @Column(name = "role", nullable = false)
   private Role role;
 
-  @Column(name = "enabled", nullable = false)
   private boolean enabled;
 
-  @Column(name = "failed_login_attempts", nullable = false)
   private int failedLoginAttempts;
 
-  @Column(name = "account_locked_until")
-  private OffsetDateTime accountLockedUntil;
+  private Instant accountLockedUntil;
 
-  @Column(name = "created_at", nullable = false, updatable = false)
   private Instant createdAt;
 
-  @Column(name = "updated_at", nullable = false)
   private Instant updatedAt;
 
-  @PrePersist
-  void prePersist() {
-    this.id = UUID.randomUUID();
+  public void initOnCreate() {
+    this.id = UUID.randomUUID().toString();
     this.createdAt = Instant.now();
     this.updatedAt = this.createdAt;
     this.enabled = false;
     if (this.role == null) this.role = Role.VOLUNTARIO;
   }
 
-  @PreUpdate
-  void preUpdate() {
+  public void touch() {
     this.updatedAt = Instant.now();
   }
 
-  public UUID getId() {
+  public String getId() {
     return id;
   }
 
@@ -169,11 +152,11 @@ public class User {
     this.failedLoginAttempts = failedLoginAttempts;
   }
 
-  public OffsetDateTime getAccountLockedUntil() {
+  public Instant getAccountLockedUntil() {
     return accountLockedUntil;
   }
 
-  public void setAccountLockedUntil(OffsetDateTime accountLockedUntil) {
+  public void setAccountLockedUntil(Instant accountLockedUntil) {
     this.accountLockedUntil = accountLockedUntil;
   }
 
