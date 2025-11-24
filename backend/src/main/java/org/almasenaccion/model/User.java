@@ -1,4 +1,5 @@
-package org.almasenaccion.model;
+
+  package org.almasenaccion.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -14,6 +15,9 @@ import java.util.UUID;
 
 @Document(collection = "users")
 public class User {
+  @Size(max = 512)
+  private String avatarUrl;
+
   @Id
   private String id;
 
@@ -41,8 +45,6 @@ public class User {
   @Size(max = 255)
   private String address;
 
-  @Size(max = 500)
-  private String skills;
 
   private Role role;
 
@@ -70,6 +72,13 @@ public class User {
 
   public String getId() {
     return id;
+  }
+
+  public String getAvatarUrl() {
+    return avatarUrl;
+  }
+  public void setAvatarUrl(String avatarUrl) {
+    this.avatarUrl = avatarUrl;
   }
 
   public String getFirstName() {
@@ -120,13 +129,6 @@ public class User {
     this.address = address;
   }
 
-  public String getSkills() {
-    return skills;
-  }
-
-  public void setSkills(String skills) {
-    this.skills = skills;
-  }
 
   public Role getRole() {
     return role;

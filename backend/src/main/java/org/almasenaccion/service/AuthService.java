@@ -45,8 +45,9 @@ public class AuthService {
     u.setPasswordHash(encoder.encode(req.getPassword()));
     u.setPhone(req.getPhone());
     u.setAddress(req.getAddress());
-    u.setSkills(req.getSkills());
-    u.setRole(Role.VOLUNTARIO);
+    Role desired = req.getRole() != null ? req.getRole() : Role.VOLUNTARIO;
+    if (desired == Role.ADMIN) desired = Role.VOLUNTARIO;
+    u.setRole(desired);
     u.initOnCreate();
     users.save(u);
     VerificationToken vt = new VerificationToken();
@@ -56,6 +57,8 @@ public class AuthService {
     vt.initOnCreate();
     tokens.save(vt);
     String verifyUrl = "/api/v1/auth/verify?token=" + vt.getToken();
+    // Log token en entorno dev para facilitar verificación manual
+    System.out.println("[DEV] Token de verificación generado: " + vt.getToken());
     emailService.send(u.getEmail(), "Verificación de cuenta", "Usa el enlace para activar tu cuenta: " + verifyUrl);
   }
 

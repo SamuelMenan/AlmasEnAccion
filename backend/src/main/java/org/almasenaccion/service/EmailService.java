@@ -23,7 +23,9 @@ public class EmailService {
     if (from != null && !from.isBlank()) msg.setFrom(from);
     try {
       sender.send(msg);
-    } catch (Exception ignored) {
+      System.out.println("[DEV] Email de verificación enviado a " + to + " (si usas SMTP local verifícalo). Texto: " + text);
+    } catch (Exception ex) {
+      System.out.println("[DEV] Fallo envío email: " + ex.getMessage());
     }
   }
 }

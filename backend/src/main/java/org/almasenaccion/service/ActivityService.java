@@ -25,6 +25,11 @@ public class ActivityService {
     a.setName(req.getName());
     a.setDescription(req.getDescription());
     a.setLocation(req.getLocation());
+    a.setCity(req.getCity());
+    a.setDepartment(req.getDepartment());
+    a.setType(req.getType());
+    a.setProject(req.getProject());
+    a.setDurationHours(req.getDurationHours() != null ? req.getDurationHours() : 2);
     a.setCapacity(req.getCapacity());
     a.setScheduledAt(req.getScheduledAt().toInstant());
     a.setCreatedById(creator.getId());

@@ -1,8 +1,11 @@
-package org.almasenaccion.dto;
+
+    package org.almasenaccion.dto;
 
 import jakarta.validation.constraints.Size;
 
 public class UpdateProfileRequest {
+  @Size(max = 512)
+  private String avatarUrl;
   @Size(max = 100)
   private String firstName;
   @Size(max = 100)
@@ -11,8 +14,6 @@ public class UpdateProfileRequest {
   private String phone;
   @Size(max = 255)
   private String address;
-  @Size(max = 500)
-  private String skills;
 
   public String getFirstName() { return firstName; }
   public void setFirstName(String firstName) { this.firstName = firstName; }
@@ -22,6 +23,6 @@ public class UpdateProfileRequest {
   public void setPhone(String phone) { this.phone = phone; }
   public String getAddress() { return address; }
   public void setAddress(String address) { this.address = address; }
-  public String getSkills() { return skills; }
-  public void setSkills(String skills) { this.skills = skills; }
+  public String getAvatarUrl() { return avatarUrl; }
+  public void setAvatarUrl(String avatarUrl) { this.avatarUrl = avatarUrl; }
 }

@@ -3,6 +3,8 @@ package org.almasenaccion.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.NotNull;
+import org.almasenaccion.model.Role;
 
 public class RegisterRequest {
   @NotBlank
@@ -20,8 +22,9 @@ public class RegisterRequest {
   private String phone;
   @Size(max = 255)
   private String address;
-  @Size(max = 500)
-  private String skills;
+
+  @NotNull
+  private Role role = Role.VOLUNTARIO;
 
   public String getFirstName() { return firstName; }
   public void setFirstName(String firstName) { this.firstName = firstName; }
@@ -35,6 +38,7 @@ public class RegisterRequest {
   public void setPhone(String phone) { this.phone = phone; }
   public String getAddress() { return address; }
   public void setAddress(String address) { this.address = address; }
-  public String getSkills() { return skills; }
-  public void setSkills(String skills) { this.skills = skills; }
+
+  public Role getRole() { return role; }
+  public void setRole(Role role) { this.role = role; }
 }

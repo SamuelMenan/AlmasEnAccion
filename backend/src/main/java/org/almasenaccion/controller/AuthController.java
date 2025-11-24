@@ -24,7 +24,7 @@ public class AuthController {
   }
 
   @GetMapping("/verify")
-  public ResponseEntity<String> verify(@RequestParam String token) {
+  public ResponseEntity<String> verify(@RequestParam("token") String token) {
     authService.verify(token);
     return ResponseEntity.ok("Cuenta activada");
   }

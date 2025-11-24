@@ -8,24 +8,24 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserService {
-  private final UserRepository users;
+    private final UserRepository users;
 
-  public UserService(UserRepository users) {
-    this.users = users;
-  }
+    public UserService(UserRepository users) {
+        this.users = users;
+    }
 
-  public User getByEmail(String email) {
-    return users.findByEmail(email).orElseThrow(() -> new IllegalStateException("Usuario no encontrado"));
-  }
+    public User getByEmail(String email) {
+        return users.findByEmail(email).orElseThrow(() -> new IllegalStateException("Usuario no encontrado"));
+    }
 
-  @Transactional
-  public User updateProfile(User user, UpdateProfileRequest req) {
-    if (req.getFirstName() != null) user.setFirstName(req.getFirstName());
-    if (req.getLastName() != null) user.setLastName(req.getLastName());
-    if (req.getPhone() != null) user.setPhone(req.getPhone());
-    if (req.getAddress() != null) user.setAddress(req.getAddress());
-    if (req.getSkills() != null) user.setSkills(req.getSkills());
-    user.touch();
-    return users.save(user);
-  }
+    @Transactional
+    public User updateProfile(User user, UpdateProfileRequest req) {
+        if (req.getFirstName() != null) user.setFirstName(req.getFirstName());
+        if (req.getLastName() != null) user.setLastName(req.getLastName());
+        if (req.getPhone() != null) user.setPhone(req.getPhone());
+        if (req.getAddress() != null) user.setAddress(req.getAddress());
+        if (req.getAvatarUrl() != null) user.setAvatarUrl(req.getAvatarUrl());
+        user.touch();
+        return users.save(user);
+    }
 }

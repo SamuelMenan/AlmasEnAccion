@@ -9,4 +9,5 @@ public interface EnrollmentRepository extends MongoRepository<Enrollment, String
   int countByActivityId(String activityId);
   Optional<Enrollment> findByUserIdAndActivityId(String userId, String activityId);
   List<Enrollment> findByUserId(String userId);
+  List<Enrollment> findByActivityId(String activityId);
 }
