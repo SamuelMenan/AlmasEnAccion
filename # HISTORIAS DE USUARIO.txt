@@ -135,17 +135,7 @@ Para enterarme oportunamente y poder inscribirme
 ☐ Envío automático al crear actividad
 **Story Points** 3
 **Prioridad** Alta
-**2.5 CERTIFICADOS
-US- 010 — Generar certificado**
-ID
-US- 010
-Como voluntario
-Quiero generar un certificado de participación
-Para acreditar mis horas y actividades cumplidas
-**Criterios de Aceptación**
-☐ Certificado en PDF descargable
-☐ Incluye nombre, horas, fechas, actividades
-☐ Firma digital y sello de la ONG
-**Story Points** 8
+
+
 
 
